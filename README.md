@@ -392,6 +392,6 @@
 
 ## Detail perubahan source code
 
-[Untuk Bug fix terkait jumlah quantity yang dipesan < 1, berikut adalah commit terkait](https://github.com/jovanshelomoJTK/pplbo-ftgo-b6/commit/cd135b8769cc015a69ac741a150fb9103cfb99a5)
+[Untuk Bug fix terkait jumlah quantity yang dipesan < 1, berikut adalah commit terkait](https://github.com/jovanshelomoJTK/pplbo-ftgo-b6/commit/d97828850efa3bb4a385893bf158fedfbdf6ed8e)
 
 [Untuk Bug fix terkait array kosong saat melakukan revise order ataupun create order, berikut adalah commit terkait](https://github.com/jovanshelomoJTK/pplbo-ftgo-b6/commit/5897d6b72604f73e7a172fb993c2ec6255297c81)
