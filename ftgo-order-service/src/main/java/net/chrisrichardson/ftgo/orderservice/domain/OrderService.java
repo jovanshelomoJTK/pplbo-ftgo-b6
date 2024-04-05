@@ -95,6 +95,10 @@ public class OrderService {
   private List<OrderLineItem> makeOrderLineItems(List<MenuItemIdAndQuantity> lineItems, Restaurant restaurant) {
     return lineItems.stream().map(li -> {
       MenuItem om = restaurant.findMenuItem(li.getMenuItemId()).orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));
+      // make sure quantity > 0
+      if (li.getQuantity() <= 0) {
+        throw new InvalidMenuItemQuantityException(li.getMenuItemId(), li.getQuantity());
+      }
       return new OrderLineItem(li.getMenuItemId(), om.getName(), om.getPrice(), li.getQuantity());
     }).collect(toList());
   }
@@ -153,6 +157,14 @@ public class OrderService {
   @Transactional
   public Order reviseOrder(long orderId, OrderRevision orderRevision) {
     Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+
+    // make sure all order revisions quantity > 0, if no, throw InvalidMenuItemQuantityException with its quantity
+    orderRevision.getRevisedOrderLineItems().forEach(roli -> {
+      if (roli.getQuantity() <= 0) {
+        throw new InvalidMenuItemQuantityException(roli.getMenuItemId(), roli.getQuantity());
+      }
+    });
+    
     ReviseOrderSagaData sagaData = new ReviseOrderSagaData(order.getConsumerId(), orderId, null, orderRevision);
     sagaInstanceFactory.create(reviseOrderSaga, sagaData);
     return order;
