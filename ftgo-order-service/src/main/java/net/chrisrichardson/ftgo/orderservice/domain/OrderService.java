@@ -93,6 +93,10 @@ public class OrderService {
 
 
   private List<OrderLineItem> makeOrderLineItems(List<MenuItemIdAndQuantity> lineItems, Restaurant restaurant) {
+    // make sure lineItems is not empty
+    if (lineItems.isEmpty()) {
+      throw new EmptyLineItemException();
+    }
     return lineItems.stream().map(li -> {
       MenuItem om = restaurant.findMenuItem(li.getMenuItemId()).orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));
       // make sure quantity > 0
@@ -156,6 +160,12 @@ public class OrderService {
 
   @Transactional
   public Order reviseOrder(long orderId, OrderRevision orderRevision) {
+
+    // make sure revision is not empty
+    if (orderRevision.getRevisedOrderLineItems().isEmpty()) {
+      throw new EmptyLineItemException();
+    }
+
     Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
 
     // make sure all order revisions quantity > 0, if no, throw InvalidMenuItemQuantityException with its quantity
